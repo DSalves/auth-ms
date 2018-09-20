@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @EnableEurekaClient
-@SpringBootApplication(scanBasePackages= {"br.com.ifc.auth.config", "br.com.ifc.auth.filter", "br.com.ifc.auth.service"})
+@SpringBootApplication(scanBasePackages= {"br.com.ifc.auth.config", "br.com.ifc.auth.controller", "br.com.ifc.auth.filter", "br.com.ifc.auth.service"})
 public class Application {
 
 	public static void main(String[] args) {

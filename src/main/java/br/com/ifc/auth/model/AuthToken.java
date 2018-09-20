@@ -8,18 +8,15 @@ import java.io.Serializable;
  * @author thiago.colombo
  *
  */
-public class Token implements Serializable {
+public class AuthToken implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private String token;
 
 	private String type;
 
-	public Token(String token, String type) {
+	public AuthToken(String token, String type) {
 		this.token = token;
 		this.type = type;
 	}

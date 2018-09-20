@@ -2,7 +2,8 @@ package br.com.ifc.auth.model;
 
 public enum HeaderHttp {
 
-	AUTHORIZATION("Authorization");
+	AUTHORIZATION("Authorization"),
+	TOKEN_PREFIX("Bearer");
 
 	private String name;
 
