@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.data.annotation.Id;
+
 /**
  * User
  * @author thiago.colombo
@@ -19,6 +21,7 @@ public class User implements Serializable{
 	/**
 	 * Name
 	 */
+	@Id
 	private String name;
 	
 	/**
@@ -72,4 +75,9 @@ public class User implements Serializable{
 	public void setRules(Set<String> rules) {
 		this.rules = rules;
 	}
+	
+	@Override
+    public String toString() {
+        return String.format("User[name=%s, firstName='%s', lastName='%s']", name, "-", rules != null ? rules.toArray(new String[rules.size()]).toString() : null);
+    }
 }
