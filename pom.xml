@@ -109,9 +109,8 @@
 				<configuration>
 					<imageName>auth-ms</imageName>
 					<baseImage>openjdk:8-jdk-alpine</baseImage>
-					<exposes>8080</exposes>
-					<entryPoint> ["java",
-						"-Djava.security.egd=file:/dev/./urandom","-jar","/${project.build.finalName}.jar"]
+					<exposes>9092</exposes>
+					<entryPoint> ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/${project.build.finalName}.jar"]
 					</entryPoint>
 					<resources>
 						<resource>
