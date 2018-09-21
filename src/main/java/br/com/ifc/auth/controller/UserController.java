@@ -20,11 +20,11 @@ public class UserController {
     @Autowired
     private UserDetailsServiceImpl userService;
         
-    @PreAuthorize("hasRole('AdminWrite')")
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value="/save", method=RequestMethod.POST, consumes="application/json", produces="application/json")
     public ResponseEntity<String> register(@RequestBody UserVO userVO) throws AuthenticationException {
     	User user = new User(userVO.getName(), userVO.getPassword());
-    	user.setRules(userVO.getRules());
+    	user.setAuthorities(userVO.getAuthorities());
     	userService.save(user);
     	return ResponseEntity.ok(new String());
     }

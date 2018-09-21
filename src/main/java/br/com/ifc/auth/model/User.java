@@ -32,13 +32,13 @@ public class User implements Serializable{
 	/**
 	 * Rules
 	 */
-	private Set<String> rules;
+	private Set<String> authorities;
 	
 	/**
 	 * Construct
 	 */
 	public User() {
-		this.rules = new HashSet<>();
+		this.authorities = new HashSet<>();
 	}
 	
 	/**
@@ -68,16 +68,16 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
-	public Set<String> getRules() {
-		return rules;
+	public Set<String> getAuthorities() {
+		return authorities;
 	}
 
-	public void setRules(Set<String> rules) {
-		this.rules = rules;
+	public void setAuthorities(Set<String> authorities) {
+		this.authorities = authorities;
 	}
 	
 	@Override
     public String toString() {
-        return String.format("User[name=%s, password='%s', rules='%s']", name, "-", rules != null ? rules.toArray(new String[rules.size()]).toString() : null);
+        return String.format("User[name=%s, password='%s', authorities='%s']", name, "-", authorities != null ? authorities.toArray(new String[authorities.size()]).toString() : null);
     }
 }

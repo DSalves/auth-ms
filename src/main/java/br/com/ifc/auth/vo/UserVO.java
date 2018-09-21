@@ -27,15 +27,15 @@ public class UserVO implements Serializable{
 	private String password;
 	
 	/**
-	 * Rules
+	 * Authorities
 	 */
-	private Set<String> rules;
+	private Set<String> authorities;
 	
 	/**
 	 * Construct
 	 */
 	public UserVO() {
-		this.rules = new HashSet<>();
+		this.authorities = new HashSet<>();
 	}
 	
 	/**
@@ -65,11 +65,11 @@ public class UserVO implements Serializable{
 		this.password = password;
 	}
 
-	public Set<String> getRules() {
-		return rules;
+	public Set<String> getAuthorities() {
+		return authorities;
 	}
 
-	public void setRules(Set<String> rules) {
-		this.rules = rules;
+	public void setAuthorities(Set<String> authorities) {
+		this.authorities = authorities;
 	}	
 }

@@ -22,9 +22,9 @@ public class UserPrincipal implements UserDetails{
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> authorities = new HashSet<>();
 		
-		if(user.getRules() != null) {
-			for(String rules : user.getRules()) {
-				authorities.add(new SimpleGrantedAuthority(rules));
+		if(user.getAuthorities() != null) {
+			for(String authority : user.getAuthorities()) {
+				authorities.add(new SimpleGrantedAuthority(authority));
 			}
 		}	
 		
