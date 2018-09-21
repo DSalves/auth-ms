@@ -1,4 +1,4 @@
-package br.com.ifc.auth.model;
+package br.com.ifc.auth.vo;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author thiago.colombo
  *
  */
-public class AuthToken implements Serializable {
+public class AuthTokenVO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -16,7 +16,7 @@ public class AuthToken implements Serializable {
 
 	private String type;
 
-	public AuthToken(String token, String type) {
+	public AuthTokenVO(String token, String type) {
 		this.token = token;
 		this.type = type;
 	}

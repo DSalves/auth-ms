@@ -1,11 +1,11 @@
-package br.com.ifc.auth.model;
+package br.com.ifc.auth.vo;
 
 /**
  * User credential
  * @author thiago.colombo
  *
  */
-public class UserCredential {
+public class UserCredentialVO {
 	
 	/**
 	 * Name

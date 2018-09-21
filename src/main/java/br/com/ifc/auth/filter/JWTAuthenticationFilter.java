@@ -39,7 +39,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
 		if (token != null) {
 			try {
-				
+				token = token.replace(HeaderHttp.TOKEN_PREFIX.getName(), "").trim();
 				username = authenticationService.getUsernameFromToken(token);
 
 			} catch (IllegalArgumentException e) {
@@ -53,6 +53,8 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UsernamePasswordAuthenticationToken authentication = authenticationService.getAuthentication(token);
+			
+			System.out.println("Autenticacao: " + authentication);
 			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 			SecurityContextHolder.getContext().setAuthentication(authentication);			
 		}

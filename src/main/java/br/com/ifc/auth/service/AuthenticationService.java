@@ -1,13 +1,11 @@
 package br.com.ifc.auth.service;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,8 +16,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import br.com.ifc.auth.config.AuthConfig;
-import br.com.ifc.auth.model.AuthToken;
 import br.com.ifc.auth.model.HeaderHttp;
+import br.com.ifc.auth.vo.AuthTokenVO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
@@ -36,15 +34,15 @@ public class AuthenticationService {
 	
 	@Autowired
     private AuthenticationManager authenticationManager;
-
+	
 	/**
 	 * 
 	 * @param auth
 	 * @param expirationTime
 	 */
-	public AuthToken getToken(UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) {
+	public AuthTokenVO getToken(UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) {
 		Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-		return new AuthToken(createToken(authentication, config.getExpirationTime()), HeaderHttp.TOKEN_PREFIX.getName());
+		return new AuthTokenVO(createToken(authentication, config.getExpirationTime()), HeaderHttp.TOKEN_PREFIX.getName());
 	}
 
 	/**
@@ -75,11 +73,21 @@ public class AuthenticationService {
 	 * @param token
 	 * @return
 	 */
+	private Jws<Claims> parseClaimsJwsToken(String token) {
+		JwtParser jwtParser = Jwts.parser().setSigningKey(config.getSecret());
+        return jwtParser.parseClaimsJws(token);
+	}
+	
+	/**
+	 * 
+	 * @param token
+	 * @return
+	 */
 	public String getUsernameFromToken(String token) {
 
 		if (token != null) {
 
-			return Jwts.parser().setSigningKey(config.getSecret()).parseClaimsJws(token.replace(HeaderHttp.TOKEN_PREFIX.getName(), "")).getBody().getSubject();
+			return parseClaimsJwsToken(token).getBody().getSubject();
 		}
 		
 		return null;
@@ -90,11 +98,21 @@ public class AuthenticationService {
 	 * @param token
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public UsernamePasswordAuthenticationToken getAuthentication(final String token) {
-        JwtParser jwtParser = Jwts.parser().setSigningKey(config.getSecret());
-        Jws<Claims> claimsJws = jwtParser.parseClaimsJws(token);
+        Jws<Claims> claimsJws = parseClaimsJwsToken(token);
         Claims claims = claimsJws.getBody();
-        final Collection<GrantedAuthority> authorities = Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(",")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-        return new UsernamePasswordAuthenticationToken(getUsernameFromToken(token), "", authorities);
-    }
+        String user = claims.getSubject();        
+		ArrayList<String> roles = (ArrayList<String>)claims.get(AUTHORITIES_KEY);
+        
+        ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        if(roles != null) {
+            for (String role : roles) {
+            	SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(role);
+            	authorities.add(simpleGrantedAuthority);
+            }
+        }
+                
+        return new UsernamePasswordAuthenticationToken(user, "", authorities);
+    }	
 }

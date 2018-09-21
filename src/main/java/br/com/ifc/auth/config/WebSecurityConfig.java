@@ -10,8 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import br.com.ifc.auth.filter.JWTAuthenticationFilter;
@@ -19,11 +17,9 @@ import br.com.ifc.auth.service.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled=true, prePostEnabled=true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	private static PasswordEncoder encoder;
-	
 	@Autowired
 	private UserDetailsServiceImpl userDetailsService;
 
@@ -36,25 +32,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
     
-    @Bean
-	public PasswordEncoder getPasswordEncoder() {
-		if (encoder == null) {
-			encoder = new BCryptPasswordEncoder();
-		}
-		return encoder;
-	}
-    
-    @Autowired
-    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
+    @Override
+    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+    	authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(userDetailsService.getPasswordEncoder());
     }
-    
     
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.cors().and().csrf().disable()
-		.authorizeRequests().antMatchers("/token/generate-token").permitAll()
-        .anyRequest().authenticated()
+		httpSecurity.cors()
+		.and()
+		.csrf().disable().authorizeRequests().antMatchers("/token/generate-token").permitAll().anyRequest().authenticated()
         .and()        
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		httpSecurity.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
