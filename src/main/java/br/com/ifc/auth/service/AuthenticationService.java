@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +28,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class AuthenticationService {
+	
+	private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
 
 	private static final String AUTHORITIES_KEY = "Roles";
 
@@ -65,6 +69,9 @@ public class AuthenticationService {
 		String token = Jwts.builder().setClaims(claims).setSubject(auth.getName()).setIssuer("auth-ms")
 				.setExpiration(new Date(date.getTime() + expirationTime)).setIssuedAt(date).setHeaderParam("typ", "JWT")
 				.signWith(SignatureAlgorithm.HS512, config.getSecret()).compact();
+		
+		LOGGER.info("Token created to user " + auth.getName() + "!");
+		
 		return token;
 	}
 	
