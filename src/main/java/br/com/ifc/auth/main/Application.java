@@ -6,9 +6,9 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@EnableEurekaClient
-@EnableDiscoveryClient
 @EnableMongoRepositories(basePackages={"br.com.ifc.auth.repository"})
+@EnableDiscoveryClient
+@EnableEurekaClient
 @SpringBootApplication(scanBasePackages= {"br.com.ifc.auth.config", "br.com.ifc.auth.controller", "br.com.ifc.auth.filter", "br.com.ifc.auth.service"})
 public class Application {
 
